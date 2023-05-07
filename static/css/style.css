@@ -1,0 +1,144 @@
+body{
+    background:black
+}
+
+
+/****************************************/
+/**************** HEADER ****************/
+/****************************************/
+
+.grid-header{
+    display: grid;
+    grid-template-columns: 1fr 18fr 1fr 1fr;
+    border: 1px solid lawngreen; /*quitar dp, solo para ver os bordes*/
+    justify-items: center;
+}
+
+.profile {
+    height: 35px;
+    
+}
+
+.logo{
+    height: 60px;
+}
+
+.search-btn{
+    
+    height: 30px;
+
+}
+
+.more{
+    height: 30px;
+}
+
+
+
+button.up {
+    color: #ffffff;
+    transition: 0.5s;
+    border-color: #0000000;
+    background-color: transparent;
+    box-shadow: inset 0 0 0 0 #0000000;
+    padding: 1em 2em;
+    margin: 0.5em;
+}
+
+button.up:hover,
+button.up:focus {
+    color: #ffffff
+    background-color: #000000;
+    border-color: #fff;
+    box-shadow: inset 0 -3.25em 0 0 #fff;
+}
+
+
+
+
+
+.ventana{
+    background-color:#9b9b9b;
+    width:600px;
+    height:600px;
+    padding: 20px 30px;
+    margin: 20% auto;
+    position: relative;
+    border-radius: 20px;
+}
+
+.ventana a img {
+  float: right;
+}
+
+.ventana span {
+    color:#000000;
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+
+.modal{
+  background-color: rgba(0,0,0,.8);
+  position:fixed;
+  top:-250px;
+  right:0;
+  bottom:0;
+  left:0;
+  opacity:0;
+  pointer-events:none;
+  transition: all 1s;
+}
+#new_post:target{
+  opacity:1;
+  pointer-events:auto;
+}
+
+
+
+.square {
+  width: 200px;
+  height: 200px;
+  max-width: 400px;
+  max-height: 400px;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.square p {
+  font-family: sans-serif;
+  font-size: 18px;
+  text-align: center;
+  margin: 0;
+
+}
+
+
+
+
+.btn_new_post{
+    position:fixed;
+    width:60px;
+    height:60px;
+    line-height: 63px;
+    bottom:25px;
+    right:25px;
+    background:#ffffff;
+    color:#000000;
+    border-radius:50px;
+    text-align:center;
+    font-size:35px;
+    box-shadow: 0px 1px 10px rgba(0,0,0,0.3);
+    z-index:100;
+    transition: all 300ms ease;
+}
+.btn_new_post:hover{
+    background: #000000;
+    color:#ffffff;
+}
+
+
+
+

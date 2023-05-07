@@ -53,29 +53,30 @@
 
 </head>
 <body>
-    <nav>
-      <img src="icono.png">
-    </nav>
+    <header class="header">
+        <nav>
+        <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
+        </nav>
+    </header>
 
     <form id="fSignIn" class="formulario" method="POST" action="/sign_in">
         <label>NOME</label>
         <input type="text" name="user_name" required>
         <label>APELIDOS</label>
-        <input type="text" name="user_apelidosxd" required>
+        <input type="text" name="user_surname" required>
         <label>NICKNAME</label>
         <input type="text" name="user_nickname" required>
-        <label>TELÉFONO MÓVIL</label>
+        <label>DATA NACEMENTO</label>
+        <input type="date" name="user_birthday" required>
+        <label>TELÉFONO MÓBIL</label>
         <input type="text" name="user_phonenumber" required>
         <label>CORREO ELECTRÓNICO</label>
         <input type="email" name="user_email" required>
-        <label>DATA NACEMENTO</label>
-        <input type="date" name="user_birthday" required>
+        <label>CONTRASINAL</label>
+        <input type="password" name="user_password" required>
         
         <button type="submit">CREAR CONTA</button>
     </form>
 
-    <div>
-        <img src="icono.png">
-    </div>
 </body>
 </html>

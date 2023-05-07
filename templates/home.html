@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        function redirectToNewPost() {
+          window.location.href = "/new_post";
+        }
+        function redirectToLogOut() {
+          window.location.href = "/";
+        }
+        document.getElementById('square').addEventListener('click', function() {
+        document.getElementById('post_photo').click();
+      });
+
+          function loadPreview(event) {
+            var input = event.target;
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                var preview = document.getElementById('square');
+                preview.style.backgroundImage = "url('" + e.target.result + "')";
+                preview.style.backgroundSize = "cover";
+                preview.querySelector('p').style.display = "none";
+              }
+              reader.readAsDataURL(input.files[0]);
+            }
+          }
+    </script>
+</head>
+<body>
+<header>
+      <div class="grid-header">
+        <a href="profile_photo.html" class="profile-link"><img src="{{ url_for('static', filename='img/profile_photo.png') }}" class="profile"></a>
+        <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
+        <a href="buscar.html"><img src="{{ url_for('static', filename='img/search.png') }}" class="search-btn"></a>
+        <a href="opciones.html"><img src="{{ url_for('static', filename='img/more.png') }}" class="more"></a>
+      </div>
+</header>
+
+    <div id="dvContactsList">
+        {% if users_list %}
+        <p><ul>
+        {% for user in users_list %}
+            <li>{{ user }}</li>
+        {% endfor %}
+        </ul></p>
+        {% else %}
+            <p><b>No contacts.</b></p>
+        {% endif %}
+    </div>
+
+    <div>
+        <p>Nombre: {{ user.name }} {{ user.surname }}</p>
+        <p>Nickname: {{ user.nickname }}</p>
+        <p>Teléfono móvil: {{ user.phonenumber }}</p>
+        <p>Correo electrónico: {{ user.email }}</p>
+        <p>Fecha de nacimiento: {{ user.birthday }}</p>
+    </div>
+
+    <button id="btnLogout" class="up" onclick="redirectToLogOut()">Log Out</button>
+
+    <div class="opcion">
+        <a href="#new_post">
+            <button id="btnNewPost" class="btn_new_post">+</button>
+        </a>
+    </div>
+
+    <div id="new_post" class="modal">
+        <div class="ventana">
+          <a href="#" ><img src="{{ url_for('static', filename='img/close.png') }}"></a>
+
+            <span>Nova publicación</span>
+
+            <form method="POST" enctype="multipart/form-data" action="/new_post" class="formulario">
+              <div id="square" class="square" onclick="document.getElementById('post_photo').click();">
+                <p>Elixe unha foto</p>
+              </div>
+              <input type="file" name="post_photo" id="post_photo" accept="image/*" onchange="loadPreview(event)" style="display:none">
+              <br>
+              <label for="post_title">PÉ DE FOTO</label>
+              <input type="text" name="post_title" id="post_title">
+              <br>
+              <input type="submit" value="Subir">
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+
+</body>
+</html>

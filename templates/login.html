@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<header class="header">
+    <nav>
+    <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
+    </nav>
+</header>
+<body>
+
+    <form class="formulario" method="POST" action="/login">
+        <label>NOME DE USUARIO OU CORREO ELECTRÓNICO</label>
+        <input type="text" name="user_li" required>
+        <label>CONTRASINAL</label>
+        <input type="text" name="user_li_password" required>
+        <button type="submit">INICIAR SESIÓN</button>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        function redirectToSignIn() {
+          window.location.href = "/sign_in";
+        }
+        function redirectToLogIn() {
+          window.location.href = "/login";
+        }
+    </script>
+</head>
+<body>
+    <header>
+      <div class="grid-header">
+        <a href="foto_perfil.html"><img src="{{ url_for('static', filename='img/profile_photo.png') }}" class="profile"></a>
+        <a href="icono.html"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
+        <a href="buscar.html"><img src="{{ url_for('static', filename='img/search.png') }}" class="search-btn"></a>
+        <a href="opciones.html"><img src="{{ url_for('static', filename='img/more.png') }}" class="more"></a>
+      </div>
+    </header>
+
+    <button id="btnSignIn" class="up" onclick="redirectToSignIn()">Sign In</button>
+    <button id="btnLogIn" class="up" onclick="redirectToLogIn()">Log In</button>
+
+</body>
+</html>

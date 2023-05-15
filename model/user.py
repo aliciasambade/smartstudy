@@ -2,12 +2,14 @@ from typing import Optional
 
 from flask_login import LoginManager, UserMixin
 import werkzeug.security as safe
+import uuid
 import sirope
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(UserMixin):
     def __init__(self, name, last_name, nickname, birth_date, phone_number, email, password):
+        self._id = str(uuid.uuid4())
         self._name = name
         self._last_name = last_name
         self._nickname = nickname

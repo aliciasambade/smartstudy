@@ -52,6 +52,20 @@
         {% endif %}
     </div>
 
+    <div id=dvPostsList">
+        {% if users_list %}
+        <p><ul>
+            {% for post in posts %}
+                <div>
+                    <img src="{{ url_for('static', filename='images/' + post.img) }}">
+                </div>
+            {% endfor %}
+        </ul></p>
+        {% else %}
+            <p><b>No contacts.</b></p>
+        {% endif %}
+    </div>
+
     <div>
         <p>Nombre: {{ user.name }} {{ user.surname }}</p>
         <p>Nickname: {{ user.nickname }}</p>
@@ -74,7 +88,7 @@
 
             <span>Nova publicación</span>
 
-            <form method="POST" enctype="multipart/form-data" action="/new_post" class="formulario">
+            <form method="POST" enctype="multipart/form-data" action="/home" class="formulario">
               <div id="square" class="square" onclick="document.getElementById('post_photo').click();">
                 <p>Elixe unha foto</p>
               </div>

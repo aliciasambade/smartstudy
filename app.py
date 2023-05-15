@@ -1,9 +1,17 @@
+import datetime
+
 import flask
 import flask_login
 import sirope
+import os
 from model.user import User
+from model.post import Post
+from werkzeug.utils import secure_filename
 from flask import render_template, redirect, request
 from flask_login import LoginManager, UserMixin, current_user, login_required, login_user
+
+UPLOAD_FOLDER = os.path.join('static/images')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
 def create_app():
@@ -17,6 +25,7 @@ def create_app():
 
 app, srp, login_manager = create_app()
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'clave'
 
 
@@ -41,7 +50,7 @@ def sign_in():
         email = request.form['user_email']
         password = request.form['user_password']
         user = User(name, surname, nickname, birthday, phonenumber, email, password)
-
+        print(user)
         srp.save(User(name, surname, nickname, birthday, phonenumber, email, password))
         users = list(srp.load_last(User, 10))
         sust = {
@@ -69,15 +78,31 @@ def login():
 @app.route('/home', methods=["GET", "POST"])
 @login_required
 def home():
-    return render_template('home.html')
-
-
-@app.route('/new_post', methods=["GET", "POST"])
-@login_required
-def new_post():
     if request.method == 'POST':
+        # img = request.files['post_photo'].read()
+        photo = request.files['post_photo']
+        title = request.form['post_title']
+        time = datetime.datetime.now()
+        # ruta = "images/test.jpg"
+        # with open(ruta, "ab") as f:
+        #    f.write(img)
+        # srp.save(Post(ruta, title, time))
+        img = secure_filename(photo.filename)
+        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], img))
+        srp.save(Post(img, title, time))
+        posts = list(srp.load_last(Post, 10))
 
-    return render_template('home.html')
+        users = list(srp.load_last(User, 10))
+        print("ola esamos aqui")
+        sust = {
+            "posts": posts,
+            "user": current_user,
+            "users_list": users
+        }
+        return flask.render_template('home.html', **sust)
+    return flask.render_template('index.html')
+
+
 
 
 @app.route('/logout')
@@ -86,3 +111,8 @@ def logout():
     flask.session.clear()
     flask_login.logout_user()
     return redirect(url_for('/'))
+
+
+def get_posts():
+    posts = list(srp.load_all(Post))
+    return posts

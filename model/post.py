@@ -27,6 +27,6 @@ class Post:
     def time(self):
         return self._time
 
-    @img.setter
+    @img.setter  # set img???
     def img(self, value):
         self._img = value

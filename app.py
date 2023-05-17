@@ -70,8 +70,16 @@ def login():
         password = request.form['user_li_password']
         user = User.find(srp, email)
 
-        login_user(user)
-        return flask.render_template('home.html', user=user)
+        posts = list(srp.load_last(Post, 10))
+        print("ola esto é post login")
+        sust = {
+            "posts": posts,
+            "user": current_user
+        }
+        print("este esta enriba do primeiro return")
+        return flask.redirect('/home')
+
+    print("este esta enriba do segundo return")
     return render_template('login.html')
 
 
@@ -93,16 +101,20 @@ def home():
         posts = list(srp.load_last(Post, 10))
 
         users = list(srp.load_last(User, 10))
-        print("ola esamos aqui")
         sust = {
             "posts": posts,
             "user": current_user,
             "users_list": users
         }
         return flask.render_template('home.html', **sust)
-    return flask.render_template('index.html')
 
-
+    posts = list(srp.load_last(Post, 10))
+    print("ola esto é post login")
+    sust = {
+        "posts": posts,
+        "user": current_user
+    }
+    return flask.render_template('home.html', **sust)
 
 
 @app.route('/logout')

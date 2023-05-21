@@ -2,38 +2,113 @@ body{
     background:black
 }
 
+/**************** INDEX ****************/
 
-/****************************************/
-/**************** HEADER ****************/
-/****************************************/
-
-.grid-header{
+.dvIndex{
+    color:white;
+    font-family: "montserrat", sans-serif;
+    height:70vh;
     display: grid;
-    grid-template-columns: 1fr 18fr 1fr 1fr;
-    border: 1px solid lawngreen; /*quitar dp, solo para ver os bordes*/
-    justify-items: center;
+    grid-template-columns:repeat(2,1fr);
+    padding: 40px;
+    /* border: 1px solid lawngreen;*/
 }
 
-.profile {
-    height: 35px;
-    
+/**************** ANIMACION TEXTO ****************/
+
+.dvIndexText span{
+    font-family: "montserrat", sans-serif;
+    font-size: 50px;
+    display: block;
+    white-space: nowrap;
+    border-right: 3px solid;
+    width: 24ch;
+    height: 50px;
+    animation: typing 3s steps(20), blink .5s infinite step-end alternate;
+    overflow:hidden;
 }
 
-.logo{
-    height: 60px;
+@keyframes typing {from {width: 0}}
+
+@keyframes blink {
+  0% {border-color: transparent}
+  50% { border-color: white}
+  100% {border-color: transparent}
 }
 
-.search-btn{
-    
-    height: 30px;
+/**************** ANIMACION AUTH ****************/
+
+.dvIndexAuth{
+    justify-self: left;
+    /*border: 1px solid lawngreen;*/
+}
+
+.form {
+  position: relative;
+  height: 60px;
+  width: 300px;
+  overflow: hidden;
+  padding-top: 30px;
 
 }
 
-.more{
-    height: 30px;
+.form input {
+  height: 80px;
+  /*font-size: px;*/
+  width: auto;
+  color: #fff;
+  border: none;
+  background-color: black;
+  display: block;
+  margin-bottom: 40px;
 }
 
+.form label {
+  display: block;
+  margin-bottom: 10px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-bottom: 1px solid white;
+}
+.form label::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border-bottom: 3px solid white;
+  transform: translateX(-100%);
+  transition: all 0.3s ease;
+}
+.content-name {
+  position: absolute;
+  font-size: 24px;
+  bottom: 0px;
+  left: 0px;
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
+.form input:focus {
+  outline: none;
+}
+.form input:focus + .label-name .content-name,
+.form input:valid + .label-name .content-name {
+  transform: translateY(-150%);
+  font-size: 14px;
+  left: 0px;
+  color: white;
+}
+.form input:focus + .label-name::after,
+.form input:valid + .label-name::after {
+  transform: translateX(0%);
+}
 
+/**************** ANIMACION AUTH BOTON ****************/
 
 button.up {
     color: #ffffff;
@@ -53,9 +128,26 @@ button.up:focus {
     box-shadow: inset 0 -3.25em 0 0 #fff;
 }
 
+/****************************************/
+/**************** HEADER ****************/
+/****************************************/
 
+.grid-header{
+    display: grid;
+    grid-template-columns: 1fr 23fr 1fr 1fr;
+    /* border: 1px solid lawngreen; quitar dp, solo para ver os bordes*/
+    justify-items: center;
+}
 
+.profile { height: 35px; }
 
+.logo{ height: 60px; }
+
+.search-btn{ height: 30px; }
+
+.more{ height: 30px; }
+
+/**************** ANIMACION NEW POST ****************/
 
 .ventana{
     background-color:#9b9b9b;
@@ -88,12 +180,13 @@ button.up:focus {
   pointer-events:none;
   transition: all 1s;
 }
+
 #new_post:target{
   opacity:1;
   pointer-events:auto;
 }
 
-
+/**************** X VENTANA NEW POST ****************/
 
 .square {
   width: 200px;
@@ -115,8 +208,7 @@ button.up:focus {
 
 }
 
-
-
+/**************** ANIMACION BOTON NEW POST ****************/
 
 .btn_new_post{
     position:fixed;
@@ -139,44 +231,96 @@ button.up:focus {
     color:#ffffff;
 }
 
-
-
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  z-index: 999;
-  transition: all 0.3s ease-in-out;
-}
-
-.sidebar.active {
-  left: 0;
-}
-
-
-
-
-
-
-
-
-
+/**************** PAGINA HOME ****************/
 
 .dvPostsList{
-  display: grid;
-  padding: 40px;
-  border: 1px solid lawngreen; /*quitar dp, solo para ver os bordes*/
-  justify-items: center;
+    display: grid;
+    padding: 40px;
+    border: 1px solid lawngreen; /*quitar dp, solo para ver os bordes*/
+    justify-items: center;
 }
 
 .img_post{
-  height: 550px;
-  width: 350px;
+    height: 400px;
+    width: 300px;
 }
+
+/**************** VIEW POST ****************/
+#dvViewPost{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-top:40px;
+}
+
+#dvPost{
+    justify-self: center;
+}
+
+#dvComments{
+
+}
+
+.bar{
+    background-color: #eee;
+    border-radius: 10px;
+    border: solid 1px #ccc;
+    margin-right: -5px;
+    padding: 7px;
+    width: 90%;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.bar:hover{
+    background-color: white;
+}
+.bar .section{
+}
+.bar .section.photo{
+    flex: 1;
+    width: 35px;
+}
+.bar .section.photo img{
+    border-radius: 100%;
+    width:100% ;
+    padding-right: 7px;
+}
+.bar .section.text{
+    flex: 20;
+    width: calc(100% - 35px - 114px -15px);
+    justify-content: flex-start;
+}
+
+.inputComment{
+    display:grid;
+    grid-template-columns: repeat(2, auto);
+    grid-gap: 10px;
+    justify-items: end;
+}
+
+.bar .section.buttons{
+    flex: 2;
+
+    padding-left: 7px;
+    width: 144px;
+}
+.bar .section button{
+    width: 30px;
+    height: 30px;
+}
+.bar .section button:hover{
+    color: #000;
+}
+.bar .section input[type="text"]{
+  border:0;
+  background: transparent;
+  outline: none;
+  font-size: 18px;
+  width: 100%;
+}
+
+/**************** AJUSTAR RESPONSIVE ****************/
 
 @media (max-width: 2000px) {
   .dvPostsList{

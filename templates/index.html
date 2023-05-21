@@ -22,9 +22,31 @@
         <a href="opciones.html"><img src="{{ url_for('static', filename='img/more.png') }}" class="more"></a>
       </div>
     </header>
+    <div id="dvIndex" class="dvIndex">
+        <div class="dvIndexText">
+          <span >Unha nova forma de estudar.</span>
+        </div>
+        <div id="dvIndexAuth" class="dvIndexAuth">
+            <div id="dvIndexLogin" class="dvIndexLogin">
+                <form  method="POST" action="/login">
+                    <div  class="form">
+                        <input id= "user_li" type="text" name="user_li" autocomplete="off" required />
+                        <label for="user_li" class="label-name">
+                            <span class="content-name">NOME DE USUARIO</span>
+                        </label>
+                    </div>
+                    <div class="form">
+                        <input id= "user_li_password" type="text" name="user_li_password" autocomplete="off" required />
+                        <label for="user_li_password" class="label-name">
+                            <span class="content-name">CONTRASEÑA</span>
+                        </label>
+                    </div>
+                    <button id="btnLogIn" class="up" onclick="redirectToLogIn()">Log In</button>
 
-    <button id="btnSignIn" class="up" onclick="redirectToSignIn()">Sign In</button>
-    <button id="btnLogIn" class="up" onclick="redirectToLogIn()">Log In</button>
-
+                </form>
+            </div>
+        </div>
+          <button id="btnSignIn" class="up" onclick="redirectToSignIn()">Sign In</button>
+    </div>
 </body>
 </html>

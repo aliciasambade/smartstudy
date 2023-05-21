@@ -4,13 +4,20 @@ import flask
 import flask_login
 import sirope
 import os
+from PIL import Image
 from model.user import User
 from model.post import Post
+from model.comment import Comment
+
 from werkzeug.utils import secure_filename
 from flask import render_template, redirect, request
 from flask_login import LoginManager, UserMixin, current_user, login_required, login_user
 
-UPLOAD_FOLDER = os.path.join('static/images')
+# Definimos as respectivas rutas onde se van gardar as imaxes e os formatos permitidos
+POSTS_FOLDER = os.path.join('static/images/posts')
+COMMENTS_FOLDER = os.path.join('static/images/comments')
+PROFILE_FOLDER = os.path.join('static/images/profile')
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
@@ -23,13 +30,17 @@ def create_app():
     return fapp, sirp, login_manager
 
 
-app, srp, login_manager = create_app()
+app, srp, lm = create_app()
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# Engadimos á configuración o necesario
 app.config['SECRET_KEY'] = 'clave'
 
+app.config['POSTS_FOLDER'] = POSTS_FOLDER
+app.config['COMMENTS_FOLDER'] = COMMENTS_FOLDER
+app.config['PROFILE_FOLDER'] = PROFILE_FOLDER
 
-@login_manager.user_loader
+
+@lm.user_loader
 def load_user(email):
     return User.find(srp, email)
 
@@ -49,9 +60,15 @@ def sign_in():
         phonenumber = request.form['user_phonenumber']
         email = request.form['user_email']
         password = request.form['user_password']
-        user = User(name, surname, nickname, birthday, phonenumber, email, password)
+
+        profile_img = request.files['profile_photo']
+        img = secure_filename(profile_img.filename)
+        profile_img = crop_image(profile_img)
+
+        profile_img.save(os.path.join(app.config['PROFILE_FOLDER'], img))
+        user = User(name, surname, nickname, birthday, phonenumber, email, password, img)
         print(user)
-        srp.save(User(name, surname, nickname, birthday, phonenumber, email, password))
+        srp.save(User(name, surname, nickname, birthday, phonenumber, email, password, img))
         users = list(srp.load_last(User, 10))
         sust = {
             "users_list": users,
@@ -69,52 +86,63 @@ def login():
         email = request.form['user_li']
         password = request.form['user_li_password']
         user = User.find(srp, email)
-
-        posts = list(srp.load_last(Post, 10))
-        print("ola esto é post login")
-        sust = {
-            "posts": posts,
-            "user": current_user
-        }
-        print("este esta enriba do primeiro return")
+        login_user(user)
         return flask.redirect('/home')
-
-    print("este esta enriba do segundo return")
-    return render_template('login.html')
+    return flask.redirect('/')
 
 
 @app.route('/home', methods=["GET", "POST"])
 @login_required
 def home():
     if request.method == 'POST':
-        # img = request.files['post_photo'].read()
         photo = request.files['post_photo']
         title = request.form['post_title']
         time = datetime.datetime.now()
-        # ruta = "images/test.jpg"
-        # with open(ruta, "ab") as f:
-        #    f.write(img)
-        # srp.save(Post(ruta, title, time))
         img = secure_filename(photo.filename)
-        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], img))
-        srp.save(Post(img, title, time))
+        photo.save(os.path.join(app.config['POSTS_FOLDER'], img))
+        user = current_user
+        user_id = user._user_id
+        print(user_id)
+        srp.save(Post(img, title, time, user_id))
+        print(user.__dict__)
         posts = list(srp.load_last(Post, 10))
 
-        users = list(srp.load_last(User, 10))
         sust = {
             "posts": posts,
-            "user": current_user,
-            "users_list": users
+            "user": current_user
         }
         return flask.render_template('home.html', **sust)
 
     posts = list(srp.load_last(Post, 10))
-    print("ola esto é post login")
     sust = {
         "posts": posts,
         "user": current_user
     }
     return flask.render_template('home.html', **sust)
+
+
+@login_required
+@app.route('/view_post/<post_id>', methods=['GET', 'POST'])
+def view_post(post_id):
+    post = Post.find(srp, post_id)
+    if request.method == 'POST':
+        comment = request.form['commentText']
+        srp.save(Comment(comment, current_user._user_id, post_id))
+        comments = list(srp.load_last(Comment, 10))
+        sust = {
+            "post": post,
+            "comments": comments,
+            "user": current_user
+        }
+        return render_template('view_post.html', **sust)
+    comments = list(srp.load_last(Comment, 10))
+
+    sust = {
+        "post": post,
+        "comments": comments,
+        "user": current_user
+    }
+    return render_template('view_post.html', **sust)
 
 
 @app.route('/logout')
@@ -128,3 +156,15 @@ def logout():
 def get_posts():
     posts = list(srp.load_all(Post))
     return posts
+
+
+def crop_image(img):
+    crop = Image.open(img)
+    width, height = crop.size
+    size = min(width, height)
+    left = (width - size) // 2
+    top = (height - size) // 2
+    right = (width + size) // 2
+    bottom = (height + size) // 2
+
+    return crop.crop((left, top, right, bottom))

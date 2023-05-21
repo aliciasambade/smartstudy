@@ -5,11 +5,12 @@ import werkzeug.security as safe
 import uuid
 import sirope
 from werkzeug.security import generate_password_hash, check_password_hash
+from sirope.oid import OID
 
 
 class User(UserMixin):
-    def __init__(self, name, last_name, nickname, birth_date, phone_number, email, password):
-        self._id = str(uuid.uuid4())
+    def __init__(self, name, last_name, nickname, birth_date, phone_number, email, password, profile_img):
+        self._user_id = str(uuid.uuid4())
         self._name = name
         self._last_name = last_name
         self._nickname = nickname
@@ -17,7 +18,7 @@ class User(UserMixin):
         self._phone_number = phone_number
         self._email = email
         self._password = safe.generate_password_hash(password)
-        self._posts_oids = []
+        self._profile_img = profile_img
 
     @property
     def name(self):
@@ -40,14 +41,16 @@ class User(UserMixin):
         return self._email
 
     @property
-    def password(self):
-        return self._password
+    def profile_img(self):
+        return self._profile_img
+
+    @profile_img.setter  # set img???
+    def profile_img(self, value):
+        self._profile_img = value
 
     @property
-    def oids_posts(self):
-        if not self.__dict__.get("_posts_oids"):
-            self._posts_oids = []
-        return self._posts_oids
+    def password(self):
+        return self._password
 
     def get_id(self):
         return self.email
@@ -56,7 +59,7 @@ class User(UserMixin):
         return safe.check_password_hash(self._password, pswd)
 
     def add_post_oid(self, post_oid):
-        self.oids_posts.append(post_oid)
+        self.posts_oids.append(post_oid)
 
     @staticmethod
     def current_user():

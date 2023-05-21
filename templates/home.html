@@ -11,6 +11,11 @@
         function redirectToLogOut() {
           window.location.href = "/";
         }
+        function redirectToPost(postId) {
+          var url = '/view_post/' + postId;
+          window.location.href = url;
+        }
+
         document.getElementById('square').addEventListener('click', function() {
         document.getElementById('post_photo').click();
       });
@@ -32,24 +37,21 @@
 </head>
 <body>
 <header>
-      <div class="grid-header">
-        <a href="profile_photo.html" class="profile-link"><img src="{{ url_for('static', filename='img/profile_photo.png') }}" class="profile"></a>
+    <div class="grid-header">
+        <a href="profile_photo.html" class="profile-link"><img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" class="profile"></a>
         <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
         <a href="buscar.html"><img src="{{ url_for('static', filename='img/search.png') }}" class="search-btn"></a>
         <a href="opciones.html"><img src="{{ url_for('static', filename='img/more.png') }}" class="more"></a>
-      </div>
+    </div>
 </header>
 
-
-
     <div id="dvPostsList" class="dvPostsList">
-        {% if users_list %}
             {% for post in posts %}
-                <div id="dvpost" method="GET" action="/view/post.id" >
-                    <img src="{{ url_for('static', filename='images/' + post.img) }}" class="img_post">
+                <div id="dvpost" onclick="redirectToPost('{{ post.post_id }}')">
+                    <img src="{{ url_for('static', filename='images/posts/' + post.img) }}" class="img_post">
+                    <p>{{ post.title }}</p>
                 </div>
             {% endfor %}
-        {% endif %}
     </div>
 
     <button id="btnLogout" class="up" onclick="redirectToLogOut()">Log Out</button>

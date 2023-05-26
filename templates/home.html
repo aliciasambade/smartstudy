@@ -38,7 +38,7 @@
 <body>
 <header>
     <div class="grid-header">
-        <a href="profile_photo.html" class="profile-link"><img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" class="profile"></a>
+        <a href="profile_photo.html" class="profile-link"><img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" class="image_profile"></a>
         <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
         <a href="buscar.html"><img src="{{ url_for('static', filename='img/search.png') }}" class="search-btn"></a>
         <a href="opciones.html"><img src="{{ url_for('static', filename='img/more.png') }}" class="more"></a>
@@ -46,12 +46,23 @@
 </header>
 
     <div id="dvPostsList" class="dvPostsList">
-            {% for post in posts %}
-                <div id="dvpost" onclick="redirectToPost('{{ post.post_id }}')">
-                    <img src="{{ url_for('static', filename='images/posts/' + post.img) }}" class="img_post">
-                    <p>{{ post.title }}</p>
-                </div>
-            {% endfor %}
+                {% for usr in users %}
+                    {% for post in posts %}
+                        {% if post._img is defined and post._title is defined and usr._user_id == post._user_id %}
+                            <div id="dvHomePost" onclick="redirectToPost('{{ post.post_id }}')">
+                                {% if usr._user_id == post._user_id %}
+                                    <img src="{{ url_for('static', filename='images/profile/' + usr.profile_img) }}" class="image_profile">
+                                    <span>{{ usr.nickname }}</span>
+                                    <img src="{{ url_for('static', filename='images/posts/' + post.img) }}" class="img_post">
+                                    <div class="asignatura-box">
+                                        <span class="asignatura-text">Asignatura</span>
+                                    </div>
+                                    <p>{{ post.title }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
     </div>
 
     <button id="btnLogout" class="up" onclick="redirectToLogOut()">Log Out</button>

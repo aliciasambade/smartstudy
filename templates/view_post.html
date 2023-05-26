@@ -1,54 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-      integrity="sha512-YT7Dq4USpxCnMJK0ApmcYx0M02pYbQVpg5Jq+jzwwS/TkO5ft7RcKjZR3w20ENBqoZs/s9VM/A8SWUSndvHw4A==" crossorigin="anonymous" />
+{% extends 'template.html' %}
+{% block title %}View post{%endblock %}
 
-    <script src="https://kit.fontawesome.com/a7975bb60f.js" crossorigin="anonymous"></script>
-
-    <script>
-        function changeIcon() {
-            var icon = document.getElementById("likeIcon");
-            var button = document.getElementById("likeButton");
-
-            if (icon.classList.contains("fa-regular")) {
-                icon.classList.remove("fa-regular");
-                icon.classList.add("fa-solid");
-                icon.style.color = "#ff0000";
-                button.setAttribute("aria-pressed", "true");
-            } else {
-                icon.classList.remove("fa-solid");
-                icon.classList.add("fa-regular");
-                icon.style.color = "#000000";
-                button.setAttribute("aria-pressed", "false");
-            }
-        }
-        function redirectToPost(postId) {
-            var url = '/view_post/' + postId;
-            window.location.href = url;
-        }
-
-    </script>
-
-
-
-
-</head>
-<body>
-
+{% block content %}
     <div id="dvViewPost">
         <div id="dvPost">
-            <img src="{{ url_for('static', filename='images/' + post.img) }}" class="img_post">
+            <img src="{{ url_for('static', filename='images/posts/' + post.img) }}" class="img_post">
             <p>{{ post.title }}</p>
             <p>{{ post.time }}</p>
         </div>
         <div id="dvComments">
             <div id="dvNewComment" class="bar">
                 <div class="section photo">
-                    <img src="{{ url_for('static', filename='images/' + post.img) }}" width="100%">
+                    <img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" width="100%">
                 </div>
                 <div class="section text">
                     <form class="inputComment" action="/view_post/{{ post.post_id }}" method="POST">
@@ -60,16 +23,22 @@
                 </div>
             </div>
             <div id="dvCommentsList">
-                {% for comment in comments %}
-                    <div class="bar">
-                        <span class="inputComment">{{ comment.comment }}</span>
-                        <button id="likeButton" onclick="changeIcon()">
-                            <i id="likeIcon" class="fa-regular fa-thumbs-up fa-lg" style="color: #000000;"></i>
-                        </button>
-                    </div>
+                {% for usr in users %}
+                    {% for comment in comments %}
+                        {% if usr._user_id == comment._user_id %}
+                            <div class="bar">
+                                <img src="{{ url_for('static', filename='images/profile/' + usr.profile_img) }}" class="image_profile">
+                                <span class="inputComment">{{ comment.comment }}</span>
+                                {% if user._user_id != comment._user_id %}
+                                    <button id="likeButton" onclick="changeIcon()">
+                                        <i id="likeIcon" class="fa-regular fa-thumbs-up fa-lg" style="color: #000000;"></i>
+                                    </button>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
             </div>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

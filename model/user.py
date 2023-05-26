@@ -1,6 +1,7 @@
 from typing import Optional
 
 from flask_login import LoginManager, UserMixin
+
 import werkzeug.security as safe
 import uuid
 import sirope
@@ -76,3 +77,10 @@ class User(UserMixin):
 
     def __str__(self):
         return f"Name: {self._name} {self._last_name} {self._nickname} {self._email}"
+
+    @staticmethod
+    def get_user_by_id(user_id):
+        user = sirope.Sirope().filter(User,
+                                      lambda u: u._user_id == user_id)
+
+        return user

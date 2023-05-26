@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
     <style>
+        .input-error {
+          border: 1px solid red;
+        }
+
+        .mensaje-error {
+          color: red;
+          font-size: 12px;
+          margin-top: 4px;
+        }
+
         body {
             background-color: black;
         }
-
         nav img {
             width: 150px;
             height: 80px;
@@ -16,23 +27,18 @@
             margin-top: 30px;
 
         }
-
         .formulario{
-            margin-top: 90px;
             margin-left: 100px;
             display:grid;
             grid-template-columns: repeat(2, 1fr);
         }
-
-        #fSignIn label {
+        .formulario label {
             color: white;
             font-size: 14px;
             font-family: Verdana, sans-serif;
         }
-
-        #fSignIn input {
+        .formulario input {
             display: block;
-            margin-bottom: 40px;
             border-radius: 10px;
             background-color: #ccc;
             font-family: Verdana, sans-serif;
@@ -41,7 +47,8 @@
             height: 30px;
         }
 
-        #fSignIn button {
+
+        .formulario button {
             width: 150px;
             height: 40px;
             color: white;
@@ -49,6 +56,10 @@
             border: 1px solid white;
             border-radius: 6px;
             font-family: Verdana, sans-serif;
+        }
+
+        .formulario button:disabled {
+              opacity: 0.5;
         }
         .square {
           width: 200px;
@@ -61,32 +72,14 @@
           align-items: center;
           justify-content: center;
         }
-
         .square p {
           font-family: sans-serif;
-
           font-size: 18px;
           text-align: center;
           margin: 0;
-
         }
 
-
     </style>
-    <script>
-        function loadPreview(event) {
-            var input = event.target;
-            if (input.files && input.files[0]) {
-              var reader = new FileReader();
-                reader.onload = function (e) {
-                    var preview = document.getElementById('square');
-                    preview.style.backgroundImage = "url('" + e.target.result + "')";
-                    preview.style.backgroundSize = "cover";
-                    preview.querySelector('p').style.display = "none";
-                }
-              reader.readAsDataURL(input.files[0]);
-            }
-          }    </script>
 </head>
 <body>
     <header class="header">
@@ -94,30 +87,44 @@
         <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
         </nav>
     </header>
-
     <form id="fSignIn" class="formulario" method="POST" enctype="multipart/form-data" action="/sign_in">
         <div id="divFormSignUp">
+
             <label>NOME</label>
-            <input type="text" name="user_name" required>
+            <input type="text" name="user_name" placeholder="  Ex: Alicia" required>
+            <div id="user_name_error" class="error-message"></div>
+
             <label>APELIDOS</label>
-            <input type="text" name="user_surname" required>
+            <input type="text" name="user_surname" placeholder="  Ex: Rodríguez Rodríguez" required>
+            <div id="user_surname_error" class="error-message"></div>
+
             <label>NICKNAME</label>
-            <input type="text" name="user_nickname" required>
+            <input type="text" name="user_nickname" placeholder="  Ex: aliciarodriguez123" required>
+            <div id="user_nickname_error" class="error-message"></div>
+
             <label>DATA NACEMENTO</label>
             <input type="date" name="user_birthday" required>
+            <div id="user_birthday_error" class="error-message"></div>
+
             <label>TELÉFONO MÓBIL</label>
             <input type="text" name="user_phonenumber" required>
+            <div id="user_phonenumber_error" class="error-message"></div>
+
             <label>CORREO ELECTRÓNICO</label>
-            <input type="email" name="user_email" required>
+            <input type="email" name="user_email" placeholder="  Ex: alicia@email.com" required>
+            <div id="user_email_error" class="error-message"></div>
+
             <label>CONTRASINAL</label>
             <input type="password" name="user_password" required>
+            <div id="user_password_error" class="error-message"></div>
         </div>
         <div id="divImgSignUp">
             <div id="square" class="square" onclick="document.getElementById('profile_photo').click();">
                 <p>Elixe unha foto</p>
             </div>
             <input type="file" name="profile_photo" id="profile_photo" accept="image/*" onchange="loadPreview(event)" style="display:none">
-            <button type="submit">CREAR CONTA</button>
+            <div id="submit_error" class="mensaje-error"></div>
+            <button type="submit" id="submit-btn" class="submit-btn" disabled>CREAR CONTA</button>
         </div>
     </form>
 

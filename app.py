@@ -10,7 +10,7 @@ from model.post import Post
 from model.comment import Comment
 
 from werkzeug.utils import secure_filename
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, session
 from flask_login import LoginManager, UserMixin, current_user, login_required, login_user
 
 # Definimos as respectivas rutas onde se van gardar as imaxes e os formatos permitidos
@@ -45,6 +45,27 @@ def load_user(email):
     return User.find(srp, email)
 
 
+def validate_password(password):
+    while True:
+        if len(password) < 8:
+            print("Asegúrate de que tu contraseña tenga al menos 8 caracteres")
+        elif re.search('[0-9]', password) is None:
+            print("Asegúrate de que tu contraseña tenga un número")
+        elif re.search('[A-Z]', password) is None:
+            print("Asegúrate de que tu contraseña tenga una letra mayúscula")
+        else:
+            print("Tu contraseña parece correcta")
+            break
+
+
+def nickname_exists(nickname):
+    users = srp.load_all(User)
+    for user in users:
+        if user.nickname == nickname:
+            return True
+    return False
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -62,10 +83,14 @@ def sign_in():
         password = request.form['user_password']
 
         profile_img = request.files['profile_photo']
-        img = secure_filename(profile_img.filename)
-        profile_img = crop_image(profile_img)
+        if profile_img is None or profile_img.filename == '':
+            img = 'profile_photo.png'
+        else:
+            img = secure_filename(profile_img.filename)
+            print(img)
+            profile_img = crop_image(profile_img)
+            profile_img.save(os.path.join(app.config['PROFILE_FOLDER'], img))
 
-        profile_img.save(os.path.join(app.config['PROFILE_FOLDER'], img))
         user = User(name, surname, nickname, birthday, phonenumber, email, password, img)
         print(user)
         srp.save(User(name, surname, nickname, birthday, phonenumber, email, password, img))
@@ -77,6 +102,7 @@ def sign_in():
         login_user(user)
 
         return flask.render_template('home.html', **sust)
+
     return render_template('sign_in.html')
 
 
@@ -105,18 +131,13 @@ def home():
         print(user_id)
         srp.save(Post(img, title, time, user_id))
         print(user.__dict__)
-        posts = list(srp.load_last(Post, 10))
 
-        sust = {
-            "posts": posts,
-            "user": current_user
-        }
-        return flask.render_template('home.html', **sust)
-
-    posts = list(srp.load_last(Post, 10))
+    posts = list(srp.load_all(Post))
+    users = list(srp.load_all(User))
     sust = {
         "posts": posts,
-        "user": current_user
+        "user": current_user,
+        "users": users
     }
     return flask.render_template('home.html', **sust)
 
@@ -128,15 +149,17 @@ def view_post(post_id):
     if request.method == 'POST':
         comment = request.form['commentText']
         srp.save(Comment(comment, current_user._user_id, post_id))
+        users = list(srp.load_all(User))
         comments = list(srp.load_last(Comment, 10))
+
         sust = {
             "post": post,
             "comments": comments,
+            "users": users,
             "user": current_user
         }
         return render_template('view_post.html', **sust)
     comments = list(srp.load_last(Comment, 10))
-
     sust = {
         "post": post,
         "comments": comments,

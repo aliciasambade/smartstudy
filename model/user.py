@@ -75,6 +75,10 @@ class User(UserMixin):
     def find(s: sirope.Sirope, email: str) -> "User":
         return s.find_first(User, lambda u: u.email == email)
 
+    @staticmethod
+    def find_nickname(s: sirope.Sirope, nickname: str) -> "User":
+        return s.find_first(User, lambda u: u.nickname == nickname)
+
     def __str__(self):
         return f"Name: {self._name} {self._last_name} {self._nickname} {self._email}"
 

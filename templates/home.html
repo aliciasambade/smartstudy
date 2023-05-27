@@ -38,10 +38,8 @@
 <body>
 <header>
     <div class="grid-header">
-        <a href="profile_photo.html" class="profile-link"><img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" class="image_profile"></a>
+        <a class="profile-link"><img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" class="image_profile"></a>
         <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" class="logo"></a>
-        <a href="buscar.html"><img src="{{ url_for('static', filename='img/search.png') }}" class="search-btn"></a>
-        <a href="opciones.html"><img src="{{ url_for('static', filename='img/more.png') }}" class="more"></a>
     </div>
 </header>
 
@@ -52,7 +50,7 @@
                             <div id="dvHomePost" onclick="redirectToPost('{{ post.post_id }}')">
                                 {% if usr._user_id == post._user_id %}
                                     <img src="{{ url_for('static', filename='images/profile/' + usr.profile_img) }}" class="image_profile">
-                                    <span>{{ usr.nickname }}</span>
+                                    <span style="color:white;font-family: Verdana, sans-serif; padding-start:20px;">{{ usr.nickname }}</span>
                                     <img src="{{ url_for('static', filename='images/posts/' + post.img) }}" class="img_post">
                                     <div class="asignatura-box">
                                         <span class="asignatura-text">Asignatura</span>

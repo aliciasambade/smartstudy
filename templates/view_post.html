@@ -11,7 +11,7 @@
         <div id="dvComments">
             <div id="dvNewComment" class="bar">
                 <div class="section photo">
-                    <img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" width="100%">
+                    <img src="{{ url_for('static', filename='images/profile/' + user.profile_img) }}" width="100%"  class="image_profile">
                 </div>
                 <div class="section text">
                     <form class="inputComment" action="/view_post/{{ post.post_id }}" method="POST">

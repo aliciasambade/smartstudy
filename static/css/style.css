@@ -208,7 +208,7 @@ button.up:focus {
 
 .grid-header{
     display: grid;
-    grid-template-columns: 1fr 23fr 1fr 1fr;
+    grid-template-columns: 1fr 23fr;
     /* border: 1px solid lawngreen; quitar dp, solo para ver os bordes*/
     justify-items: center;
 }
